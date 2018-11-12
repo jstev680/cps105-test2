@@ -1,0 +1,117 @@
+<html lang="en">
+  <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <title>Easy Attendance Monitor</title>
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <style type="text/css">
+            body {
+                margin-left: 25%;
+                margin-right: 25%;
+            }
+
+            .requirements {
+
+            }
+        </style>
+    </head>
+    <body>
+        <div class="requirements">
+            <h1>Requirements</h1>
+            <ol>
+                <li>All students should be listed on the page.</li>
+                <li>The user should be allowed to select any date.</li>
+                <li>The user should be allowed to select any student.</li>
+                <li>Saved selections should restore upon closing the browser and reselecting the same date.</li>
+                <li>Student names should be displayed alphabetically by last name.</li>
+                <li>Users are required to select a date before saving.</li>
+            </ol>
+            <hr/>
+            <div class="float-left">
+                <h1>Students (25 Enrolled)</h1>
+            </div>
+            <div class="float-right">
+                <input type="date" id="selectedDate"/>
+            </div>
+            <table class="table" id="studentsTable">
+                <thead>
+                    <th>Absent</th>
+                    <th>Name</th>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+            <div class="float-right">
+                <a href="javascript:save()" class="btn btn-primary">Save</a>
+            </div>
+        </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        const students = [
+            "Robert Obrien",
+            "Samantha Hammond",
+            "Jeannie Norton",
+            "Saul Vaughn",
+            "Joy Tucker",
+            "Danielle Sanders",
+            "Paul Campbell",
+            "Reginald Newman",
+            "Julie Gonzalez",
+            "Warren Ross",
+            "David Davis",
+            "Wilma Morgan",
+            "Patti Watson",
+            "Sheryl Aguilar",
+            "Meghan Sanchez",
+            "Anna Lane",
+            "Becky Mckenzie",
+            "Cesar Castro",
+            "Josefina Rowe",
+            "Tricia Cunningham",
+            "Lila Wilkins",
+            "Antonia Robertson",
+            "Kimberly Howard",
+            "Donnie Mclaughlin",
+            "Frank Wilson"
+        ];
+
+        for(let student in students) {
+            if(students[student].length % 2 == 0) {
+                $('#studentsTable tbody').append('<tr><td><input id="' + student + '-absent" type="checkbox"/></td><td>' + students[student] + '</td></tr>');
+            }
+        }
+
+        $('#selectedDate').change(function() {
+            for(let student in students) {
+                $('#' + student + '-absent').prop("checked", false);
+            }
+            let myStudents = window.localStorage[$('#selectedDate').val()];
+            if(myStudents) {
+                for(let student in myStudents.split(",")) {
+                    $('#' + student + '-absent').prop("checked", true);
+                }
+            }
+        });
+
+        function save() {
+            if($('#selectedDate').val() === "") {
+                alert("Please select a date before saving.");
+            } else {
+                let absentStudents = [];
+                for(let student in students) {
+                    if($('#' + student + '-absent').prop("checked")) {
+                        absentStudents.push(student);    
+                    }
+                }
+                window.localStorage[$('#selectedDate').val()] = absentStudents;
+            }
+        }
+    </script>
+</html>
